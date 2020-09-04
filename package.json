@@ -14,10 +14,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "axios": "latest",
     "element-ui": "^2.13.2",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
-    "axios": "latest"
+    "vue-cookies": "^1.7.3",
+    "vue-router": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

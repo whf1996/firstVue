@@ -11,11 +11,24 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/font/iconfont.css'
 // 引入axios
 import axios from 'axios'
+import VueCookies from 'vue-cookies'
+
+// 配置请求的根路径
+axios.defaults.baseURL = 'http://www.hhh.com/management/'
 
 // 使用注册element-ui
 Vue.use(ElementUI)
+Vue.use(VueCookies)
+// axios 请求拦截器
+// axios.interceptors.request.use(config => {
+//   config.headers.Authorization = window.sessionStorage.getItem('token')
+//   console.log(config)
+//   return config
+// })
+// 挂载vue实例
 Vue.prototype.$http = axios
 Vue.prototype.$message = ElementUI.Message
+Vue.prototype.$confirm = ElementUI.MessageBox.confirm
 Vue.config.productionTip = false
 
 // eslint-disable-next-line no-new

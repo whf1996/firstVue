@@ -2,23 +2,21 @@
   <div class="login_container">
     <div class="login_box">
       <div class="login_photo">
-        <img src="../assets/logo.png" alt="">
+        <img src="../assets/aishangxue.png" alt="">
       </div>
       <el-form label-width="0px" class="login_form" :model="loginForm" :rules="loginFormRules" ref="loginFormRef">
         <!--        用户名-->
-        <el-form-item prop="username">
-          <el-input prefix-icon="ali-iconfont ali-icon-user" placeholder="请输入用户名"
-                    v-model="loginForm.username"></el-input>
+        <el-form-item prop="phone">
+          <el-input prefix-icon="ali-iconfont ali-icon-user" placeholder="请输入手机号" v-model="loginForm.phone"></el-input>
         </el-form-item>
         <!--        密码-->
         <el-form-item prop="password">
-          <el-input prefix-icon="ali-iconfont ali-icon-mima" placeholder="请输入密码" v-model="loginForm.password"
-                    type="password"></el-input>
+          <el-input prefix-icon="ali-iconfont ali-icon-mima" placeholder="请输入密码" v-model="loginForm.password" type="password"></el-input>
         </el-form-item>
         <!--        按钮-->
         <el-form-item class="btn">
+          <el-button type="danger" @click="resetData">重置</el-button>
           <el-button type="primary" @click="login">登入</el-button>
-          <el-button type="info" @click="resetData">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -30,16 +28,16 @@
     data () {
       return {
         'loginForm': {
-          'username': '',
+          'phone': '',
           'password': ''
         },
         'loginFormRules': {
-          'username': [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
-            {min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur'}
+          'phone': [
+            {required: true, message: '请输入手机号', trigger: 'blur'},
+            {min: 11, max: 11, message: '长度在 11 到 11 个字符', trigger: 'blur'}
           ],
           'password': [
-            {required: true, message: '请输入活动名称', trigger: 'blur'},
+            {required: true, message: '请输入密码', trigger: 'blur'},
             {min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur'}
           ]
         }
@@ -49,12 +47,16 @@
       resetData () {
         this.$refs.loginFormRef.resetFields()
       },
-      login: function () {
-        this.$refs.loginFormRef.validate(valid => {
+      login () {
+        this.$refs.loginFormRef.validate(async valid => {
           if (!valid) return false
-          if (!(this.loginForm.username === 'admin' && this.loginForm.password === '123456')) return this.$message.error('用户名或密码错误')
-          window.sessionStorage.setItem('token', '这是token')
-          this.$message.success('登入成功')
+          const {data: res} = await this.$http.post('user/login', this.loginForm)
+          if (res.status !== 200) {
+            return this.$message.error(res.msg)
+          }
+          window.localStorage.setItem('user', JSON.stringify(res.result))
+          this.$message.success(res.msg)
+          // window.sessionStorage.setItem('token', 'this is a token')
           this.$router.push('/home')
         })
       }
